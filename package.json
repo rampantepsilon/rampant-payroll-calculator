@@ -1,0 +1,15 @@
+{
+  "name": "payroll-calculator",
+  "version": "1.0.0",
+  "description": "Simple Electron-based Payroll Calculator",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "test": "electron ."
+  },
+  "author": "Tom \"RampantEpsilon\" Ware",
+  "license": "ISC",
+  "devDependencies": {
+    "electron": "^4.0.5"
+  }
+}
