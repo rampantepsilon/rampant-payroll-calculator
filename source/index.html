@@ -1,10 +1,131 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="UTF-8">
-  </head>
-  <body>
-    <h1>Rampant Payroll Calculator 2019 Edition</h1>
-    <p>If you are reading this, then this means that the application isn't fully setup yet. Check back on <a href="https://github.com/rampantepsilon/rampant-payroll-calculator">GitHub</a> for more information about the app.</p>
-  </body>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+
+<body>
+  <div ng-app="payroll" ng-controller='calc'>
+    <table>
+      <tr>
+        <td align="right">
+          Pay Rate:
+        </td>
+        <td align="left">
+          <input type='radio' ng-model='pPeriod' value='weekly'>Weekly
+          <input type='radio' ng-model='pPeriod' value='biweekly'>Bi-Weekly
+        </td>
+      </tr>
+      <tr>
+        <td align="right">
+          Marital Status:
+        </td>
+        <td align="left">
+          <input type='radio' ng-model='mStatus' value='single'>Single
+          <!--<input type='radio' ng-model='mStatus' value='married'>Married-->
+        </td>
+      </tr>
+      <tr>
+        <td align='right'>Pay Rate:</td>
+        <td align='left'><input type="text" ng-model='pRate'></td>
+      </tr>
+      <tr>
+        <td align='right'>Hours:</td>
+        <td align='left'><input type="text" ng-model='hours'></td>
+      </tr>
+      <tr>
+        <td align='right'>Dependents:</td>
+        <td align='left'><input type="text" ng-model='dependents'></td>
+      </tr>
+      <tr>
+        <td colspan='2'>&nbsp;</td>
+      </tr>
+      <tr>
+        <td align='right'>Gross Pay:</td>
+        <td align='left'>{{grossPay() | number:2}}</td>
+      </tr>
+      <!--<tr>
+        <td align='right'>Withholding Allowance:</td>
+        <td align='left'>{{allowance() | number:2}}</td>
+      </tr>-->
+      <tr>
+        <td align='right'>Federal Tax Withholding:</td>
+        <td align='left'>{{fedTax() | number:2}}</td>
+      </tr>
+      <tr>
+        <td align='right'>Social Security Withholding:</td>
+        <td align='left'>{{ssTax() | number:2}}</td>
+      </tr>
+      <tr>
+        <td align='right'>Medicare Withholding:</td>
+        <td align='left'>{{medTax() | number:2}}</td>
+      </tr>
+      <tr>
+        <td align='right'>Net Pay:</td>
+        <td align='left'>{{netPay() | number:2}}</td>
+      </tr>
+    </table>
+  </div>
+</body>
+
+<script>
+  var app = angular.module('payroll', []);
+  app.controller('calc', function($scope) {
+    $scope.pRate = '0';
+    $scope.hours = '0';
+    $scope.dependents = '0';
+    $scope.pPeriod = 'weekly';
+    $scope.mStatus = 'single';
+
+    $scope.grossPay = function() {
+      var hours, otHours, gPay;
+      if ($scope.pPeriod == 'weekly'){
+        if ($scope.hours > 40){
+          hours = 40;
+          otHours = $scope.hours - 40;
+          gPay = (hours * $scope.pRate) + (otHours * ($scope.pRate * 1.5));
+        }
+        if ($scope.hours <= 40){
+          hours = $scope.hours;
+          gPay = (hours * $scope.pRate);
+        }
+      }
+      if ($scope.pPeriod == 'biweekly'){
+        if ($scope.hours > 80){
+          hours = 80;
+          otHours = $scope.hours - 80;
+          gPay = (hours * $scope.pRate) + (otHours * ($scope.pRate * 1.5));
+        }
+        if ($scope.hours <= 80){
+          hours = $scope.hours;
+          gPay = (hours * $scope.pRate);
+        }
+      }
+      return gPay;
+    };
+    $scope.allowance = function(){
+      var allowances = 0;
+      if ($scope.pPeriod == 'weekly'){
+        allowances = 80.80 * $scope.dependents;
+      }
+      if ($scope.pPeriod == 'biweekly'){
+        allowances = 161.50 * $scope.dependents;
+      }
+      return allowances;
+    }
+    $scope.ssTax = function() {
+      var ssTax = ($scope.pRate * $scope.hours) * 0.062;
+      ssTax = Math.round(ssTax * 100)/100;
+      return ssTax;
+    }
+    $scope.medTax = function() {
+      var medTax = ($scope.pRate * $scope.hours) * 0.0145;
+      medTax = Math.round(medTax * 100)/100;
+      return medTax;
+    }
+    $scope.netPay = function() {
+      return ($scope.pRate * $scope.hours) - $scope.fedTax() - $scope.ssTax() - $scope.medTax();
+    }
+    app.expandControllerA($scope);
+  });
+</script>
+<script src='./fedwith.js'></script>
 </html>
