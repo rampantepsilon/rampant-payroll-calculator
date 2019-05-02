@@ -4,14 +4,22 @@
 
 <body>
   <div ng-app="payroll" ng-controller='calc'>
-    <table>
+    <table width='100%'>
       <tr>
         <td align="right">
           Pay Rate:
         </td>
         <td align="left">
-          <input type='radio' ng-model='pPeriod' value='weekly'>Weekly
-          <input type='radio' ng-model='pPeriod' value='biweekly'>Bi-Weekly
+          <form>
+            <input type='radio' ng-model='pPeriod' value='weekly'>Weekly
+            <input type='radio' ng-model='pPeriod' value='biweekly'>Bi-Weekly<br>
+            <!--<input type='radio' ng-model='pPeriod' value='semimonthly'>Semimonthly
+            <input type='radio' ng-model='pPeriod' value='monthly'>Monthly<br>
+            <input type='radio' ng-model='pPeriod' value='quarterly'>Quarterly
+            <input type='radio' ng-model='pPeriod' value='semiannually'>Semiannually<br>
+            <input type='radio' ng-model='pPeriod' value='annually'>Annually
+            <input type='radio' ng-model='pPeriod' value='daily'>Daily-->
+          </form>
         </td>
       </tr>
       <tr>
@@ -34,6 +42,12 @@
       <tr>
         <td align='right'>Dependents:</td>
         <td align='left'><input type="text" ng-model='dependents'></td>
+      </tr>
+      <tr>
+        <td colspan='2'>&nbsp;</td>
+      </tr>
+      <tr>
+        <td colspan='2' align='center'><button value="Reset Calculator" onClick="window.location.reload();">Reset Calculator</button></td>
       </tr>
       <tr>
         <td colspan='2'>&nbsp;</td>
@@ -101,16 +115,7 @@
       }
       return gPay;
     };
-    $scope.allowance = function(){
-      var allowances = 0;
-      if ($scope.pPeriod == 'weekly'){
-        allowances = 80.80 * $scope.dependents;
-      }
-      if ($scope.pPeriod == 'biweekly'){
-        allowances = 161.50 * $scope.dependents;
-      }
-      return allowances;
-    }
+    app.allowance($scope);
     $scope.ssTax = function() {
       var ssTax = ($scope.pRate * $scope.hours) * 0.062;
       ssTax = Math.round(ssTax * 100)/100;
@@ -124,8 +129,9 @@
     $scope.netPay = function() {
       return ($scope.pRate * $scope.hours) - $scope.fedTax() - $scope.ssTax() - $scope.medTax();
     }
-    app.expandControllerA($scope);
+    app.fedWithholding($scope);
   });
 </script>
+<script src='./allowance.js'></script>
 <script src='./fedwith.js'></script>
 </html>

@@ -1,4 +1,4 @@
-app.expandControllerA = function($scope){
+app.fedWithholding = function($scope){
   $scope.fedTax = function() {
     var fedTax;
     var newGross = $scope.grossPay();
@@ -8,6 +8,24 @@ app.expandControllerA = function($scope){
       newGross = ($scope.grossPay() - $scope.allowance());
     }
     if ($scope.pPeriod == 'biweekly'){
+      newGross = ($scope.grossPay() - $scope.allowance());
+    }
+    if ($scope.pPeriod == 'semimonthly'){
+      newGross = ($scope.grossPay() - $scope.allowance());
+    }
+    if ($scope.pPeriod == 'monthly'){
+      newGross = ($scope.grossPay() - $scope.allowance());
+    }
+    if ($scope.pPeriod == 'quarterly'){
+      newGross = ($scope.grossPay() - $scope.allowance());
+    }
+    if ($scope.pPeriod == 'semiannually'){
+      newGross = ($scope.grossPay() - $scope.allowance());
+    }
+    if ($scope.pPeriod == 'annually'){
+      newGross = ($scope.grossPay() - $scope.allowance());
+    }
+    if ($scope.pPeriod == 'daily'){
       newGross = ($scope.grossPay() - $scope.allowance());
     }
 

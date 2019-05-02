@@ -169,8 +169,8 @@ let win
 function createWindow () {
   // Create the browser window.
   win = new BrowserWindow({
-    width: 1280,
-    height: 720,
+    width: 500,
+    height: 400,
     icon: __dirname + "/Icon.png",
     title: title(),
     webPreferences: {
