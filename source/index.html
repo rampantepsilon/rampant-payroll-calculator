@@ -40,6 +40,10 @@
         <td align='left'><input type="text" ng-model='hours'></td>
       </tr>
       <tr>
+        <td align='right'>Overtime Hours:</td>
+        <td align='left'><input type="text" ng-model='otHours'></td>
+      </tr>
+      <tr>
         <td align='right'>Dependents:</td>
         <td align='left'><input type="text" ng-model='dependents'></td>
       </tr>
@@ -85,49 +89,32 @@
   app.controller('calc', function($scope) {
     $scope.pRate = '0';
     $scope.hours = '0';
+    $scope.otHours = '0';
     $scope.dependents = '0';
     $scope.pPeriod = 'weekly';
     $scope.mStatus = 'single';
 
     $scope.grossPay = function() {
       var hours, otHours, gPay;
-      if ($scope.pPeriod == 'weekly'){
-        if ($scope.hours > 40){
-          hours = 40;
-          otHours = $scope.hours - 40;
-          gPay = (hours * $scope.pRate) + (otHours * ($scope.pRate * 1.5));
-        }
-        if ($scope.hours <= 40){
-          hours = $scope.hours;
-          gPay = (hours * $scope.pRate);
-        }
-      }
-      if ($scope.pPeriod == 'biweekly'){
-        if ($scope.hours > 80){
-          hours = 80;
-          otHours = $scope.hours - 80;
-          gPay = (hours * $scope.pRate) + (otHours * ($scope.pRate * 1.5));
-        }
-        if ($scope.hours <= 80){
-          hours = $scope.hours;
-          gPay = (hours * $scope.pRate);
-        }
-      }
+      hours = $scope.hours;
+      otHours = $scope.otHours;
+      gPay = (hours * $scope.pRate) + (otHours * ($scope.pRate * 1.5));
+
       return gPay;
     };
     app.allowance($scope);
     $scope.ssTax = function() {
-      var ssTax = ($scope.pRate * $scope.hours) * 0.062;
+      var ssTax = ($scope.grossPay()) * 0.062;
       ssTax = Math.round(ssTax * 100)/100;
       return ssTax;
     }
     $scope.medTax = function() {
-      var medTax = ($scope.pRate * $scope.hours) * 0.0145;
+      var medTax = ($scope.grossPay()) * 0.0145;
       medTax = Math.round(medTax * 100)/100;
       return medTax;
     }
     $scope.netPay = function() {
-      return ($scope.pRate * $scope.hours) - $scope.fedTax() - $scope.ssTax() - $scope.medTax();
+      return ($scope.grossPay()) - $scope.fedTax() - $scope.ssTax() - $scope.medTax();
     }
     app.fedWithholding($scope);
   });
