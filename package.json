@@ -13,7 +13,11 @@
     "electron": "^8.2.0"
   },
   "dependencies": {
+<<<<<<< HEAD
     "@angular/cli": "^9.1.0"
+=======
+    "@angular/cli": ">=7.3.8"
+>>>>>>> 0dcb0f4c8418dc21992604fe2e54d88d26c452e9
   },
   "repository": {
     "type": "git",
